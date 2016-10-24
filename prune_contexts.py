@@ -54,4 +54,4 @@ with open(args.output, 'w') as fout:
         if vocabulary[context_word] < args.threshold:
             continue
 
-        fout.write('%s\n' % line)
+        fout.write('%s' % line)
