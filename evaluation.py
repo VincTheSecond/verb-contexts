@@ -75,6 +75,4 @@ with open(args.dataset, 'r') as fdataset:
 
         logging.debug('%10s | %10s | %.4f | %.4f', word1, word2, true_similarity, test_similarity)
 
-print spearmanr(true_similarities, test_similarities)[0]
-
-
+logging.info('Spearman correlation: %f', spearmanr(true_similarities, test_similarities)[0])
