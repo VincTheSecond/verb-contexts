@@ -19,7 +19,7 @@ parser = argparse.ArgumentParser()
 parser.description = 'Evaluate word vectors over a given similarity dataset.'
 parser.add_argument('--vectors', required=True, help='a file with word vectors')
 parser.add_argument('--folds', required=True, help='a number of cross-validation folds')
-parser.add_argument('--ignore_reflexive', required=True, help='if 1, ignore reflexive pronouns in evaluation')
+parser.add_argument('--reflexive_verbs', required=True, help='possible values: {remove|merge|asis}')
 parser.add_argument('--dataset', required=True, help='dataset to evaluate')
 args = parser.parse_args()
 
@@ -59,9 +59,16 @@ for fold in range(1, int(args.folds) + 1):
             true_similarities.append(true_similarity)
 
             # Take only first token from word1, word2 to effective ignoring reflexives.
-            if args.ignore_reflexive == '1':
+            if args.reflexive_verbs == 'remove':
                 word1 = word1.split(' ')[0]
                 word2 = word2.split(' ')[0]
+            elif args.reflexive_verbs == 'merge':
+                word1 = word1.replace(' ', '_')
+                word2 = word2.replace(' ', '_')
+            elif args.reflexive_verbs == 'asis':
+                pass
+            else:
+                raise ValueError('Unknown value in --reflexive_verbs option.')
 
             if word1 not in vectors:
                 unknown_words[word1] = 1
