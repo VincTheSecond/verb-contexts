@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Treebank Explorer</title>
+        <link rel="stylesheet" href='css/styles.css' />
+        <script type='text/javascript' src='js/jquery-3.1.1.min.js'></script>
+        <script type='text/javascript' src='js/methods.js'></script>
+    </head>
+    <body>
+        <div id='header'></div>
+        <h1>Treebank<span style='color: darkred; font-weight: bold'>Explorer</span></h1>
+
+        <div id='main'>
+            <p>Sentence ID: <input type="text" id="sent_id"> <input type="button" id="search" value="Show!"></p>
+            <br>
+
+            <div id="iframe_container">
+                <iframe id="tree"></iframe>
+            </div>
+        </div>
+
+        <div id='footer'>
+            Vincent Kriz, <a href='mailto:kriz@ufal.mff.cuni.cz'>kriz@ufal.mff.cuni.cz</a>
+        </div>
+    </body>
+</html>
