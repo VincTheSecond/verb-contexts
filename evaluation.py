@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding=utf-8
 #
 # Author: (c) 2016 Vincent Kriz <kriz@ufal.mff.cuni.cz>
 #
@@ -71,12 +72,40 @@ for fold in range(1, int(args.folds) + 1):
                 raise ValueError('Unknown value in --reflexive_verbs option.')
 
             if word1 not in vectors:
-                unknown_words[word1] = 1
-                unknown_pairs['%s + %s' % (word1, word2)] = 1
+                # Try lemmatized version of following words:
+                if 'říct' not in vectors:
+                    word1 = 'říci'
+                if 'neuspět' not in vectors:
+                    word1 = 'uspět'
+
+                # Try lemmatized version of the reflexive word (si->se)
+                # if args.reflexive_verbs == 'merge'.
+                if args.reflexive_verbs == 'merge':
+                    word1 = word1.replace('_si', '_se')
+                    if word1 not in vectors:
+                        unknown_words[word1] = 1
+                        unknown_pairs['%s + %s' % (word1, word2)] = 1
+                else:
+                    unknown_words[word1] = 1
+                    unknown_pairs['%s + %s' % (word1, word2)] = 1
 
             if word2 not in vectors:
-                unknown_words[word2] = 1
-                unknown_pairs['%s + %s' % (word1, word2)] = 1
+                # Try lemmatized version of following words:
+                if 'říct' not in vectors:
+                    word2 = 'říci'
+                if 'neuspět' not in vectors:
+                    word2 = 'uspět'
+
+                # Try lemmatized version of the reflexive word (si->se)
+                # if args.reflexive_verbs == 'merge'.
+                if args.reflexive_verbs == 'merge':
+                    word1 = word1.replace('_si', '_se')
+                    if word1 not in vectors:
+                        unknown_words[word1] = 1
+                        unknown_pairs['%s + %s' % (word1, word2)] = 1
+                else:
+                    unknown_words[word2] = 1
+                    unknown_pairs['%s + %s' % (word1, word2)] = 1
 
             test_similarity = 0.0
             if word1 in vectors and word2 in vectors:
@@ -96,3 +125,6 @@ logging.debug('Correlations            : %s', correlations)
 logging.info('Spearman correlation    : %.3f', np.mean(correlations))
 logging.debug('Unknown pairs           : %d', len(unknown_pairs))
 logging.info('Number of unknown pairs : %.3f', len(unknown_pairs) / float(total_pairs))
+
+for unknown_word in unknown_words:
+    print unknown_word
