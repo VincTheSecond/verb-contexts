@@ -73,10 +73,10 @@ for fold in range(1, int(args.folds) + 1):
 
             if word1 not in vectors:
                 # Try lemmatized version of following words:
-                if 'říct' not in vectors:
-                    word1 = 'říci'
-                if 'neuspět' not in vectors:
-                    word1 = 'uspět'
+                # if 'říct' not in vectors:
+                #     word1 = 'říci'
+                # if 'neuspět' not in vectors:
+                #     word1 = 'uspět'
 
                 # Try lemmatized version of the reflexive word (si->se)
                 # if args.reflexive_verbs == 'merge'.
@@ -91,10 +91,10 @@ for fold in range(1, int(args.folds) + 1):
 
             if word2 not in vectors:
                 # Try lemmatized version of following words:
-                if 'říct' not in vectors:
-                    word2 = 'říci'
-                if 'neuspět' not in vectors:
-                    word2 = 'uspět'
+                # if 'říct' not in vectors:
+                #     word2 = 'říci'
+                # if 'neuspět' not in vectors:
+                #     word2 = 'uspět'
 
                 # Try lemmatized version of the reflexive word (si->se)
                 # if args.reflexive_verbs == 'merge'.
@@ -126,5 +126,5 @@ logging.info('Spearman correlation    : %.3f', np.mean(correlations))
 logging.debug('Unknown pairs           : %d', len(unknown_pairs))
 logging.info('Number of unknown pairs : %.3f', len(unknown_pairs) / float(total_pairs))
 
-for unknown_word in unknown_words:
-    print unknown_word
+# for unknown_word in unknown_words:
+#     print unknown_word
