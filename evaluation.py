@@ -122,7 +122,7 @@ for fold in range(1, int(args.folds) + 1):
         correlations.append(spearmanr(true_similarities, test_similarities)[0])
 
 logging.debug('Correlations            : %s', correlations)
-logging.info('Spearman correlation    : %.3f', np.mean(correlations))
+logging.info('Spearman correlation    : %.4f', np.mean(correlations))
 logging.debug('Unknown pairs           : %d', len(unknown_pairs))
 logging.info('Number of unknown pairs : %.3f', len(unknown_pairs) / float(total_pairs))
 
