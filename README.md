@@ -1,6 +1,86 @@
 # verb-contexts
 Select best verb contexts to maximize word2vec verb similarities.
 
+## Update 2018-08-26
+## EVALUATION OVER CELEX
+
+POS | Name                                                        | Command
+----+-------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+N   | Vulic Best                                                  | python evaluation_celex.py --celex /net/work/people/kriz/udapi/data/D_celex/dictionary.txt --vectors ../data/exp_en_nouns_vulic_best/dim300vecs --report ../celex/nouns_vulic_best.csv
+N   | DER                                                         | python evaluation_celex.py --celex /net/work/people/kriz/udapi/data/D_celex/dictionary.txt --vectors ../data/exp_en_nouns_cinkova_der_all_nmod_enNouns004a_enNouns002a_prep_appos/dim300vecs --report ../celex/nouns_der_all_nmod_enNouns004a_enNouns002a_prep_appos.csv
+N   | HAL                                                         | python evaluation_celex.py --celex /net/work/people/kriz/udapi/data/D_celex/dictionary.txt --vectors ../data/exp_en_nouns_cinkova_hal_all_nmod_compound_prep_objI_conj_derinetAdj/dim300vecs --report ../celex/nouns_hal_all_nmod_compound_prep_objI_conj_derinetAdj.csv 
+N   | DER MERGED                                                  | python evaluation_celex.py --celex /net/work/people/kriz/udapi/data/D_celex/dictionary.txt --vectors ../data/exp_en_nouns_cinkova_der_merged_all_enNouns004a_nmod_enNouns001b_prep_enNouns002a_compound_conj_derinetAdj_enNouns003b_subj_derinetNoun_enNouns005/dim300vecs --report ../celex/nouns_der_merged_all_enNouns004a_nmod_enNouns001b_prep_enNouns002a_compound_conj_derinetAdj_enNouns003b_subj_derinetNoun_enNouns005.csv
+N   | HAL MERGED                                                  | python evaluation_celex.py --celex /net/work/people/kriz/udapi/data/D_celex/dictionary.txt --vectors ../data/exp_en_nouns_cinkova_hal_merged_all_nmod_compound_prep_conj_subj_derinetAdj/dim300vecs --report ../celex/nouns_hal_merged_all_nmod_compound_prep_conj_subj_derinetAdj.csv
+V   | Vulic Best                                                  | python evaluation_celex.py --celex /net/work/people/kriz/udapi/data/D_celex/dictionary.txt --vectors ../data/exp_en_verbs_vulic_best/dim200vecs --report ../celex/verbs_vulic_best.csv
+V   | DER                                                         | python evaluation_celex.py --celex /net/work/people/kriz/udapi/data/D_celex/dictionary.txt --vectors ../data/exp_en_verbs_cinkova_der_all_enVerbs001a/dim300vecs --report ../celex/verbs_der_all_enVerbs001a.csv
+V   | HAL                                                         | python evaluation_celex.py --celex /net/work/people/kriz/udapi/data/D_celex/dictionary.txt --vectors ../data/exp_en_verbs_cinkova_hal_all_nmod_dep_derinetVerb_derinetNoun_adv/dim300vecs --report ../celex/verbs_hal_all_nmod_dep_derinetVerb_derinetNoun_adv.csv
+V   | DER MERGED                                                  | python evaluation_celex.py --celex /net/work/people/kriz/udapi/data/D_celex/dictionary.txt --vectors ../data/exp_en_verbs_cinkova_der_merged_all_enVerbs001a_enVerbs004b_enVerbs003a_obj/dim300vecs --report ../celex/verbs_der_merged_all_enVerbs001a_enVerbs004b_enVerbs003a_obj.csv
+V   | HAL MERGED                                                  | python evaluation_celex.py --celex /net/work/people/kriz/udapi/data/D_celex/dictionary.txt --vectors ../data/exp_en_verbs_cinkova_hal_merged_all_nmod/dim300vecs --report ../celex/verbs_hal_merged_all_nmod.csv
+
+Musim znovu natrenovat veci, ktore som uz zmazal:
+
+ - VERBS > DER (ALL - enVerbs001a):
+ - mkdir exp_en_verbs_cinkova_der_all_enVerbs001a
+ - python remove_contexts.py --remove enVerbs001a --input ../data/exp_en_verbs_cinkova/dep.contexts.der --output ../data/exp_en_verbs_cinkova_der_all_enVerbs001a/dep.contexts
+ - ./do_en_experiment.sh exp_en_verbs_cinkova_der_all_enVerbs001a
+
+ - VERBS > HAL (ALL - nmod - dep - derinetVerb - derinetNoun - adv):
+ - mkdir exp_en_verbs_cinkova_hal_all_nmod_dep_derinetVerb_derinetNoun_adv
+ - python remove_contexts.py --remove nmod,dep,derinetVerb,derinetNoun,adv --input ../data/exp_en_verbs_cinkova/dep.contexts.hal --output ../data/exp_en_verbs_cinkova_hal_all_nmod_dep_derinetVerb_derinetNoun_adv/dep.contexts
+ - ./do_en_experiment.sh exp_en_verbs_cinkova_hal_all_nmod_dep_derinetVerb_derinetNoun_adv
+
+ - VERBS > HAL MERGED (ALL - nmod):
+ - mkdir exp_en_verbs_cinkova_hal_merged_all_nmod
+ - python remove_contexts.py --remove nmod --input ../data/exp_en_verbs_cinkova/dep.contexts.hal --merge_inverse_relations True --output ../data/exp_en_verbs_cinkova_hal_merged_all_nmod/dep.contexts
+ - ./do_en_experiment.sh exp_en_verbs_cinkova_hal_merged_all_nmod
+
+## Update 2018-08-27
+## Combining nouns + verbs embeddings - best bags
+
+(1) Vulic Best
+ - mkdir exp_en_n+v_vulic_best
+ - cat exp_en_nouns_vulic_best/dep.contexts exp_en_verbs_vulic_best/dep.contexts > exp_en_n+v_vulic_best/dep.contexts
+
+(2) DER
+ - mkdir exp_en_n+v_cinkova_der
+ - cat exp_en_nouns_cinkova_der_all_nmod_enNouns004a_enNouns002a_prep_appos/dep.contexts exp_en_verbs_cinkova_der_all_enVerbs001a/dep.contexts > exp_en_n+v_cinkova_der/dep.contexts
+
+(3) HAL
+ - mkdir exp_en_n+v_cinkova_hal
+ - cat exp_en_nouns_cinkova_hal_all_nmod_compound_prep_objI_conj_derinetAdj/dep.contexts exp_en_verbs_cinkova_hal_all_nmod_dep_derinetVerb_derinetNoun_adv/dep.contexts > exp_en_n+v_cinkova_hal/dep.contexts
+
+(4) DER MERGED
+ - mkdir exp_en_n+v_cinkova_der_merged
+ - cat exp_en_nouns_cinkova_der_merged_all_enNouns004a_nmod_enNouns001b_prep_enNouns002a_compound_conj_derinetAdj_enNouns003b_subj_derinetNoun_enNouns005/dep.contexts exp_en_verbs_cinkova_der_merged_all_enVerbs001a_enVerbs004b_enVerbs003a_obj/dep.contexts > exp_en_n+v_cinkova_der_merged/dep.contexts
+
+(5) HAL MERGED
+ - mkdir exp_en_n+v_cinkova_hal_merged
+ - cat exp_en_nouns_cinkova_hal_merged_all_nmod_compound_prep_conj_subj_derinetAdj/dep.contexts exp_en_verbs_cinkova_hal_merged_all_nmod/dep.contexts > exp_en_n+v_cinkova_hal_merged/dep.contexts
+
+## Update 2018-08-30
+## Combining nouns + verbs embeddings - initial bags
+
+(1) Vulic Best
+ - mkdir exp_en_n+v_vulic_init
+ - cat exp_en_nouns_vulic_baseline/dep.contexts exp_en_verbs_vulic_baseline/dep.contexts > exp_en_n+v_vulic_init/dep.contexts
+ - 
+
+(2) DER
+ - mv exp_en_n+v_cinkova_der exp_en_n+v_cinkova_der_best
+
+(3) HAL
+ - mv exp_en_n+v_cinkova_hal exp_en_n+v_cinkova_hal_best
+
+(4) DER MERGED
+ - mkdir exp_en_n+v_cinkova_der_merged_all
+ - python remove_contexts.py --remove x,y --input ../data/exp_en_verbs_cinkova/dep.contexts.der --output ../data/exp_en_n+v_cinkova_der_merged_all/dep.contexts
+
+(5) HAL MERGED
+ - mkdir exp_en_n+v_cinkova_hal_merged_all
+ - python remove_contexts.py --remove x,y --input ../data/exp_en_verbs_cinkova/dep.contexts.hal --output ../data/exp_en_n+v_cinkova_hal_merged_all/dep.contexts
+
+# Original Staff
+
 ## VERBS/DER
 
  - cat exp_en_verbs_cinkova/dep.contexts.der | cut -f 2 -d ' ' | cut -f 1 -d '_' | sort | uniq -c | sort -rn > verbs.der

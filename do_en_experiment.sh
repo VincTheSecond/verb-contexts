@@ -14,4 +14,4 @@ cd ../data/$1
 ../../word2vecf/word2vecf -train dep.contexts -wvocab wv -cvocab cv -output dim300vecs -size 300 -negative 15 -threads 10 -sample 1e-4 -iters 15 2>> log
 
 # Evaluacia
-python ../../verb-contexts/evaluation.py --vectors=dim300vecs --dataset=../../data/eval_en_verbs/simlex --reflexive_verbs asis --folds=2 2>> log
+#python ../../verb-contexts/evaluation.py --vectors=dim300vecs --dataset=../../data/eval_en_verbs/simlex --reflexive_verbs asis --folds=2 2>> log
