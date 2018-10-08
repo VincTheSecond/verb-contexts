@@ -109,7 +109,7 @@ for fold in range(1, int(args.folds) + 1):
 
             test_similarity = 0.0
             if word1 in vectors and word2 in vectors:
-                test_similarity = cosine_similarity(vectors[word1], vectors[word2])[0][0]
+                test_similarity = cosine_similarity([vectors[word1]], [vectors[word2]])[0][0]
             test_similarities.append(test_similarity)
 
             logging.debug('%s + %s | %r | %r', word1, word2, true_similarity, test_similarity)
